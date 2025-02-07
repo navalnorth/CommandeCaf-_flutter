@@ -3,24 +3,24 @@ import 'package:brew_crew/shared/constantes.dart';
 import 'package:brew_crew/shared/loading.dart';
 import 'package:flutter/material.dart';
 
-class SignIn extends StatefulWidget {
+class Register extends StatefulWidget {
+
   final Function toggleView;
 
-  const SignIn({
+  const Register({
     super.key,
     required this.toggleView
   });
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
-
-
+  
   // textfield state
   String email = '';
   String password = '';
@@ -33,7 +33,7 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
-        title: Text("Se connecter à Brew Crew", style: TextStyle(color: Colors.white, fontSize: 20),),
+        title: Text("S'inscrire à Brew Crew", style: TextStyle(color: Colors.white, fontSize: 20),),
         actions: [
           ElevatedButton.icon(
             style: const ButtonStyle(
@@ -46,7 +46,7 @@ class _SignInState extends State<SignIn> {
             onPressed: () {
               widget.toggleView();
             },
-            label: Text("S'isncrire", style: TextStyle(fontSize: 13),),
+            label: Text("Se connecter", style: TextStyle(fontSize: 13),),
           )
         ],
       ),
@@ -70,8 +70,8 @@ class _SignInState extends State<SignIn> {
               SizedBox(height: 20,),
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'Mot de Passe'),
-                validator: (value) => value!.length < 6 ? 'Entrer un Mot de passe de plus de 6 caractères' : null,
                 obscureText: true,
+                validator: (value) => value!.length < 6 ? 'Entrer un Mot de passe de plus de 6 caractères' : null,
                 onChanged: (value) {
                   setState(() {
                     password = value;
@@ -86,8 +86,7 @@ class _SignInState extends State<SignIn> {
                     setState(() {
                       loading = true;
                     });
-                    dynamic result = await _auth.signInWithEmalAndPassword(email, password);
-
+                    dynamic result = await _auth.registerWithEmalAndPassword(email, password);
                     if (result == null) {
                       setState(() {
                         error = 'Email ou mot de passe invalides';
@@ -97,7 +96,7 @@ class _SignInState extends State<SignIn> {
                   }
                 }, 
                 child: Text(
-                  "Se connecter",
+                  "S'isncrire",
                   style: TextStyle(color: Colors.white),
                 ),
                 style: ButtonStyle(
