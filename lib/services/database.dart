@@ -1,4 +1,5 @@
 import 'package:brew_crew/models/brew.dart';
+import 'package:brew_crew/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
@@ -12,7 +13,7 @@ class DatabaseService {
 
   Future updateUserData(String sugars, String name, int strength) async {
     return await brewColection.doc(uid).set({
-      'sugras': sugars,
+      'sugars': sugars,
       'name': name,
       'strength': strength,
     });
@@ -31,8 +32,25 @@ class DatabaseService {
     }).toList();
   }
 
+  //userdata from Snapshot
+UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
+  var data = snapshot.data() as Map<String, dynamic>?; // On caste les données
+
+  return UserData(
+    uid: uid!, 
+    name: data?['name'] ?? '',
+    sugars: data?['sugars'] ?? '0',
+    strength: data?['strength'] ?? 100,
+  );
+}
+
   //avoir stream de brews
   Stream<List<Brew>> get brews {
     return brewColection.snapshots().map(_brewListFromSnapshot);
+  }
+
+  //avoir user doc stream
+  Stream<UserData> get userData {
+    return brewColection.doc(uid).snapshots().map(_userDataFromSnapshot);
   }
 }
